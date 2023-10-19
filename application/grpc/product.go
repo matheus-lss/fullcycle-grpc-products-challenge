@@ -16,6 +16,12 @@ type ProductGrpcService struct {
 	pb.UnimplementedProductServiceServer
 }
 
+func NewProductGrpcService(usecase usecase.ProductUseCase) *ProductGrpcService {
+	return &ProductGrpcService{
+		ProductUseCase: usecase,
+	}
+}
+
 func (p *ProductGrpcService) CreateProduct(ctx context.Context, in *pb.ProductCreation) (*pb.ProductCreatedResult, error) {
 	value := stringToFloat64(in.Value)
 	product, err := p.ProductUseCase.Create(in.Name, value)
@@ -62,7 +68,7 @@ func toFinalResult(data []*model.Product) *pb.ProductFindAllResult {
 		result.Products = append(result.Products, &pb.ProductInfo{
 			Id:        product.ID,
 			Name:      product.Name,
-			Value:     fmt.Sprintf("%v", product.Value),
+			Value:     fmt.Sprintf("%.2f", product.Value),
 			CreatedAt: product.CreatedAt.Format("02/01/2006"),
 		})
 	}

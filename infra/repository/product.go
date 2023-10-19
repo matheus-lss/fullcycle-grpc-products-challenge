@@ -16,16 +16,16 @@ type ProductRepositoryDb struct {
 	Db *gorm.DB
 }
 
-func (r *ProductRepositoryDb) Create(product *model.Product) error {
+func (r ProductRepositoryDb) Create(product *model.Product) (*model.Product, error) {
 	err := r.Db.Create(product).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return product, nil
 }
 
-func (r *ProductRepositoryDb) FindAll() ([]*model.Product, error) {
+func (r ProductRepositoryDb) FindAll() ([]*model.Product, error) {
 	products := []*model.Product{}
 	err := r.Db.Find(products).Error
 	if err != nil {

@@ -7,11 +7,6 @@ import (
 	"github.com/matheuslssilva/fullcycle-grpc-products-challenge/domain/model"
 )
 
-// type ProductRepositoryInterface interface {
-// 	Create(product *Product) (*Product, error)
-// 	FindAll() ([]*Product, error)
-// }
-
 type ProductRepositoryDb struct {
 	Db *gorm.DB
 }
@@ -27,7 +22,7 @@ func (r ProductRepositoryDb) Create(product *model.Product) (*model.Product, err
 
 func (r ProductRepositoryDb) FindAll() ([]*model.Product, error) {
 	products := []*model.Product{}
-	err := r.Db.Find(products).Error
+	err := r.Db.Find(&products).Error
 	if err != nil {
 		return nil, err
 	}

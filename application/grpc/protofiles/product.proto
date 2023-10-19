@@ -13,7 +13,6 @@ message ProductInfo {
     string id = 1;
     string name = 2;
     string value = 3; 
-    string createdAt = 4;
 }
 
 message ProductCreatedResult {
@@ -29,6 +28,7 @@ message ProductFindAllResult {
     string status = 2;
     string error = 3; 
 }
+
 
 service ProductService {
     rpc CreateProduct(ProductCreation) returns (ProductCreatedResult) {};

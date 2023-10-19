@@ -1,8 +1,6 @@
 package model
 
 import (
-	"time"
-
 	"github.com/asaskevich/govalidator"
 	uuid "github.com/satori/go.uuid"
 )
@@ -17,10 +15,9 @@ type ProductRepositoryInterface interface {
 }
 
 type Product struct {
-	ID        string    `json:"id" gorm:"column:id;primaryKey;type:uuid" valid:"uuid"`
-	Name      string    `json:"name" gorm:"column:name;type:varchar(255)" valid:"notnull"`
-	Value     float64   `json:"value" gorm:"column:value;type:float" valid:"notnull"`
-	CreatedAt time.Time `json:"createdAt" gorm:"column:created_at;type:time" valid:"-"`
+	ID    string  `json:"id" gorm:"column:id;primaryKey;type:uuid" valid:"uuid"`
+	Name  string  `json:"name" gorm:"column:name;type:varchar(255)" valid:"notnull"`
+	Value float64 `json:"value" gorm:"column:value;type:float" valid:"notnull"`
 }
 
 func NewProduct(name string, value float64) (*Product, error) {
@@ -30,7 +27,6 @@ func NewProduct(name string, value float64) (*Product, error) {
 	}
 
 	product.ID = uuid.NewV4().String()
-	product.CreatedAt = time.Now()
 
 	if err := product.isValid(); err != nil {
 		return nil, err

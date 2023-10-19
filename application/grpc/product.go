@@ -66,10 +66,9 @@ func toFinalResult(data []*model.Product) *pb.ProductFindAllResult {
 
 	for _, product := range data {
 		result.Products = append(result.Products, &pb.ProductInfo{
-			Id:        product.ID,
-			Name:      product.Name,
-			Value:     fmt.Sprintf("%.2f", product.Value),
-			CreatedAt: product.CreatedAt.Format("02/01/2006"),
+			Id:    product.ID,
+			Name:  product.Name,
+			Value: fmt.Sprintf("%.2f", product.Value),
 		})
 	}
 

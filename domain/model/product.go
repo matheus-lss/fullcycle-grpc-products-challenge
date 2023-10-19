@@ -10,6 +10,11 @@ func init() {
 	govalidator.SetFieldsRequiredByDefault(true)
 }
 
+type ProductRepositoryInterface interface {
+	Create(product *Product) (*Product, error)
+	FindAll() ([]*Product, error)
+}
+
 type Product struct {
 	ID string `json:"id" valid:"uuid"`
 	Name string `json:"name" valid:"notnull"`

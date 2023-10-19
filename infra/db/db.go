@@ -9,6 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/matheuslssilva/fullcycle-grpc-products-challenge/domain/model"
 	_ "gorm.io/driver/sqlite"
 )
 
@@ -17,19 +18,18 @@ func init() {
 	basepath := filepath.Dir(b)
 
 	err := godotenv.Load(basepath + "/../../.env")
-
 	if err != nil {
 		log.Fatalf("Error loading .env files")
 	}
 }
 
-func ConnectDB(env string) *gorm.DB {
+func ConnectDB() *gorm.DB {
 	var dsn string
 	var db *gorm.DB
 	var err error
 
-	dsn = os.Getenv("dsnTest")
-	db, err = gorm.Open(os.Getenv("dbTypeTest"), dsn)
+	dsn = os.Getenv("dsn")
+	db, err = gorm.Open(os.Getenv("dbType"), dsn)
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 		panic(err)
@@ -40,7 +40,7 @@ func ConnectDB(env string) *gorm.DB {
 	}
 
 	if os.Getenv("AutoMigrateDb") == "true" {
-		db.AutoMigrate(&model.Product)
+		db.AutoMigrate(&model.Product{})
 	}
 
 	return db

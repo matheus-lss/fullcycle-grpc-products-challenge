@@ -1,8 +1,9 @@
 package model
 
 import (
+	"math/rand"
+
 	"github.com/asaskevich/govalidator"
-	uuid "github.com/satori/go.uuid"
 )
 
 func init() {
@@ -15,18 +16,20 @@ type ProductRepositoryInterface interface {
 }
 
 type Product struct {
-	ID    string  `json:"id" gorm:"column:id;primaryKey;type:uuid" valid:"uuid"`
-	Name  string  `json:"name" gorm:"column:name;type:varchar(255)" valid:"notnull"`
-	Value float64 `json:"value" gorm:"column:value;type:float" valid:"notnull"`
+	ID          int32   `json:"id" gorm:"column:id;primaryKey;type:int" valid:"notnull"`
+	Name        string  `json:"name" gorm:"column:name;type:varchar(255)" valid:"notnull"`
+	Description string  `json:"description" gorm:"column:description;type:varchar(255)" valid:"notnull"`
+	Price       float32 `json:"price" gorm:"column:price;type:float" valid:"notnull"`
 }
 
-func NewProduct(name string, value float64) (*Product, error) {
+func NewProduct(name, description string, price float32) (*Product, error) {
 	product := Product{
-		Name:  name,
-		Value: value,
+		Name:        name,
+		Description: description,
+		Price:       price,
 	}
 
-	product.ID = uuid.NewV4().String()
+	product.ID = int32(rand.Intn(100000))
 
 	if err := product.isValid(); err != nil {
 		return nil, err

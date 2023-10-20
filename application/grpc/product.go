@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"strconv"
 
@@ -22,29 +21,27 @@ func NewProductGrpcService(usecase usecase.ProductUseCase) *ProductGrpcService {
 	}
 }
 
-func (p *ProductGrpcService) CreateProduct(ctx context.Context, in *pb.ProductCreation) (*pb.ProductCreatedResult, error) {
-	value := stringToFloat64(in.Value)
-	product, err := p.ProductUseCase.Create(in.Name, value)
+func (p *ProductGrpcService) CreateProduct(ctx context.Context, in *pb.CreateProductRequest) (*pb.CreateProductResponse, error) {
+
+	product, err := p.ProductUseCase.Create(in.Name, in.Description, in.Price)
 	if err != nil {
-		return &pb.ProductCreatedResult{
-			Status: "not created",
-			Error:  err.Error(),
-		}, err
+		return nil, err
 	}
 
-	return &pb.ProductCreatedResult{
-		Id:     product.ID,
-		Status: "created",
+	return &pb.CreateProductResponse{
+		Product: &pb.Product{
+			Id:          product.ID,
+			Name:        product.Name,
+			Description: product.Description,
+			Price:       product.Price,
+		},
 	}, nil
 }
 
-func (p *ProductGrpcService) FindAll(ctx context.Context, in *pb.ProductFindAllRequest) (*pb.ProductFindAllResult, error) {
+func (p *ProductGrpcService) FindProducts(ctx context.Context, in *pb.FindProductsRequest) (*pb.FindProductsResponse, error) {
 	products, err := p.ProductUseCase.FindAll()
 	if err != nil {
-		return &pb.ProductFindAllResult{
-			Status: "cannot get data",
-			Error:  err.Error(),
-		}, err
+		return nil, err
 	}
 
 	finalResult := toFinalResult(products)
@@ -61,14 +58,15 @@ func stringToFloat64(v string) float64 {
 	return result
 }
 
-func toFinalResult(data []*model.Product) *pb.ProductFindAllResult {
-	result := pb.ProductFindAllResult{}
+func toFinalResult(data []*model.Product) *pb.FindProductsResponse {
+	result := pb.FindProductsResponse{}
 
 	for _, product := range data {
-		result.Products = append(result.Products, &pb.ProductInfo{
-			Id:    product.ID,
-			Name:  product.Name,
-			Value: fmt.Sprintf("%.2f", product.Value),
+		result.Products = append(result.Products, &pb.Product{
+			Id:          product.ID,
+			Name:        product.Name,
+			Description: product.Description,
+			Price:       product.Price,
 		})
 	}
 

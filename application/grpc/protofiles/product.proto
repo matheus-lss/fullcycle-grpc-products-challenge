@@ -2,35 +2,35 @@ syntax = "proto3";
 
 package github.com.matheuslssilva.grpc.products.challenge;
 
-option go_package = "./;pb";
-
-message ProductCreation {
-    string name = 1;
-    string value = 2; 
-}
-
-message ProductInfo {
-    string id = 1;
-    string name = 2;
-    string value = 3; 
-}
-
-message ProductCreatedResult {
-    string id = 1;
-    string status = 2;
-    string error = 3; 
-}
-
-message ProductFindAllRequest {}
-
-message ProductFindAllResult {
-    repeated ProductInfo products = 1;
-    string status = 2;
-    string error = 3; 
-}
-
+option go_package = "protofiles/pb";
 
 service ProductService {
-    rpc CreateProduct(ProductCreation) returns (ProductCreatedResult) {};
-    rpc FindAll(ProductFindAllRequest) returns (ProductFindAllResult) {};
+    rpc CreateProduct (CreateProductRequest) returns (CreateProductResponse) {};
+    rpc FindProducts(FindProductsRequest) returns (FindProductsResponse) {};
+}
+
+
+message CreateProductRequest {
+    string name = 1;
+    string description = 2;
+    float price = 3;
+}
+
+message Product {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    float price = 4;
+}
+
+message CreateProductResponse {
+    Product product = 1;
+}
+
+message FindProductsRequest{
+
+}
+
+message FindProductsResponse{
+   repeated Product products = 1;
 }

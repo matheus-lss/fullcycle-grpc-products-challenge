@@ -6,8 +6,8 @@ type ProductUseCase struct {
 	ProductRepositoryInterface model.ProductRepositoryInterface
 }
 
-func (p *ProductUseCase) Create(name string, value float64) (*model.Product, error) {
-	product, err := model.NewProduct(name, value)
+func (p *ProductUseCase) Create(name, description string, price float32) (*model.Product, error) {
+	product, err := model.NewProduct(name, description, price)
 	if err != nil {
 		return nil, err
 	}

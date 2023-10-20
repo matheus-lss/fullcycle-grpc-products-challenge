@@ -20,15 +20,15 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	ProductService_CreateProduct_FullMethodName = "/github.com.matheuslssilva.grpc.products.challenge.ProductService/CreateProduct"
-	ProductService_FindAll_FullMethodName       = "/github.com.matheuslssilva.grpc.products.challenge.ProductService/FindAll"
+	ProductService_FindProducts_FullMethodName  = "/github.com.matheuslssilva.grpc.products.challenge.ProductService/FindProducts"
 )
 
 // ProductServiceClient is the client API for ProductService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProductServiceClient interface {
-	CreateProduct(ctx context.Context, in *ProductCreation, opts ...grpc.CallOption) (*ProductCreatedResult, error)
-	FindAll(ctx context.Context, in *ProductFindAllRequest, opts ...grpc.CallOption) (*ProductFindAllResult, error)
+	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
+	FindProducts(ctx context.Context, in *FindProductsRequest, opts ...grpc.CallOption) (*FindProductsResponse, error)
 }
 
 type productServiceClient struct {
@@ -39,8 +39,8 @@ func NewProductServiceClient(cc grpc.ClientConnInterface) ProductServiceClient {
 	return &productServiceClient{cc}
 }
 
-func (c *productServiceClient) CreateProduct(ctx context.Context, in *ProductCreation, opts ...grpc.CallOption) (*ProductCreatedResult, error) {
-	out := new(ProductCreatedResult)
+func (c *productServiceClient) CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error) {
+	out := new(CreateProductResponse)
 	err := c.cc.Invoke(ctx, ProductService_CreateProduct_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -48,9 +48,9 @@ func (c *productServiceClient) CreateProduct(ctx context.Context, in *ProductCre
 	return out, nil
 }
 
-func (c *productServiceClient) FindAll(ctx context.Context, in *ProductFindAllRequest, opts ...grpc.CallOption) (*ProductFindAllResult, error) {
-	out := new(ProductFindAllResult)
-	err := c.cc.Invoke(ctx, ProductService_FindAll_FullMethodName, in, out, opts...)
+func (c *productServiceClient) FindProducts(ctx context.Context, in *FindProductsRequest, opts ...grpc.CallOption) (*FindProductsResponse, error) {
+	out := new(FindProductsResponse)
+	err := c.cc.Invoke(ctx, ProductService_FindProducts_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +61,8 @@ func (c *productServiceClient) FindAll(ctx context.Context, in *ProductFindAllRe
 // All implementations must embed UnimplementedProductServiceServer
 // for forward compatibility
 type ProductServiceServer interface {
-	CreateProduct(context.Context, *ProductCreation) (*ProductCreatedResult, error)
-	FindAll(context.Context, *ProductFindAllRequest) (*ProductFindAllResult, error)
+	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
+	FindProducts(context.Context, *FindProductsRequest) (*FindProductsResponse, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
 
@@ -70,11 +70,11 @@ type ProductServiceServer interface {
 type UnimplementedProductServiceServer struct {
 }
 
-func (UnimplementedProductServiceServer) CreateProduct(context.Context, *ProductCreation) (*ProductCreatedResult, error) {
+func (UnimplementedProductServiceServer) CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProduct not implemented")
 }
-func (UnimplementedProductServiceServer) FindAll(context.Context, *ProductFindAllRequest) (*ProductFindAllResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindAll not implemented")
+func (UnimplementedProductServiceServer) FindProducts(context.Context, *FindProductsRequest) (*FindProductsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindProducts not implemented")
 }
 func (UnimplementedProductServiceServer) mustEmbedUnimplementedProductServiceServer() {}
 
@@ -90,7 +90,7 @@ func RegisterProductServiceServer(s grpc.ServiceRegistrar, srv ProductServiceSer
 }
 
 func _ProductService_CreateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ProductCreation)
+	in := new(CreateProductRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -102,25 +102,25 @@ func _ProductService_CreateProduct_Handler(srv interface{}, ctx context.Context,
 		FullMethod: ProductService_CreateProduct_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).CreateProduct(ctx, req.(*ProductCreation))
+		return srv.(ProductServiceServer).CreateProduct(ctx, req.(*CreateProductRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProductService_FindAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ProductFindAllRequest)
+func _ProductService_FindProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindProductsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProductServiceServer).FindAll(ctx, in)
+		return srv.(ProductServiceServer).FindProducts(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ProductService_FindAll_FullMethodName,
+		FullMethod: ProductService_FindProducts_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).FindAll(ctx, req.(*ProductFindAllRequest))
+		return srv.(ProductServiceServer).FindProducts(ctx, req.(*FindProductsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -137,8 +137,8 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProductService_CreateProduct_Handler,
 		},
 		{
-			MethodName: "FindAll",
-			Handler:    _ProductService_FindAll_Handler,
+			MethodName: "FindProducts",
+			Handler:    _ProductService_FindProducts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

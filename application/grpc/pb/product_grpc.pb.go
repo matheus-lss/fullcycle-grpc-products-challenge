@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ProductService_CreateProduct_FullMethodName = "/github.com.matheuslssilva.grpc.products.challenge.ProductService/CreateProduct"
-	ProductService_FindProducts_FullMethodName  = "/github.com.matheuslssilva.grpc.products.challenge.ProductService/FindProducts"
+	ProductService_CreateProduct_FullMethodName = "/github.com.codeedu.codepix.ProductService/CreateProduct"
+	ProductService_FindProducts_FullMethodName  = "/github.com.codeedu.codepix.ProductService/FindProducts"
 )
 
 // ProductServiceClient is the client API for ProductService service.
@@ -129,7 +129,7 @@ func _ProductService_FindProducts_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ProductService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "github.com.matheuslssilva.grpc.products.challenge.ProductService",
+	ServiceName: "github.com.codeedu.codepix.ProductService",
 	HandlerType: (*ProductServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
